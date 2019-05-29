@@ -318,6 +318,14 @@ body {
 	cursor: pointer;
 }
 
+#pref_select div:active,
+.line_select div:active,
+.station_select div:active {
+	color: white;
+	background: red;
+	cursor: pointer;
+}
+
 .line_select {
 	width: 256px;
 }

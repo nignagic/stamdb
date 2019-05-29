@@ -171,6 +171,8 @@ $(function(){
         $('div.selected-list').append("<div class='station_form'>" + element + "</div>");
         currentFileCount += 1;
         totalManageElement.attr('value', currentFileCount);
+		var selectedlist = $('.selected-list');
+        $(selectedlist).scrollTop(selectedlist[0].scrollHeight);
     })
     $('div.selected-list').sortable({
         handle: ".sortable-handle",
