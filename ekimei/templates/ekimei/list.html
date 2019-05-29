@@ -1,0 +1,15 @@
+{% extends 'ekimei/base.html' %}
+
+{% block title %}動画一覧{% endblock %}
+
+{% block content %}
+{% if latest_movie_list %}
+<ul>
+	{% for movie in latest_movie_list %}
+	<li><a href="/ekimei/movie/{{ movie.youtube_id }}/">{{ movie.title }}</a></li>
+	{% endfor %}
+</ul>
+{% else %}
+<p> No movies are available</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,10 @@
+{{ station.station_name }}を含む駅名動画
+{% if moviebystationlist %}
+<ul>
+	{% for station in moviebystationlist %}
+	<li><a href="/ekimei/movie/{{ station.movie.main_id }}/">{{ station.movie }}</a></li>
+	{% endfor %}
+</ul>
+{% else %}
+<p> No movies are available</p>
+{% endif %}

@@ -1,0 +1,20 @@
+{{ station_matches.0.line_cd }}を含む駅名動画
+<ul>
+	<!-- {% for stations in moviebystationlist %}
+		{{ station_matches.y.line_cd }}
+		{% if stations %}
+			{% for station in stations %}
+			<li><a href="/ekimei/movie/{{ station.movie.main_id }}/">{{ station.movie }}</a></li>
+			{% endfor %}
+			<br>
+		{% endif %}
+	{% endfor %} -->
+	{% for station in station_matches %}
+		{{ station }} {{ station.line_cd }}
+		<ul>
+		{% for stationinmovie in station.stationinmovie_set.all %}
+			<li><a href="/ekimei/movie/{{ stationinmovie.movie.main_id }}/">{{ stationinmovie.movie }}</a></li>
+		{% endfor %}
+		</ul>
+	{% endfor %}
+</ul>

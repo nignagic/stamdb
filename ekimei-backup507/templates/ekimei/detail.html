@@ -1,0 +1,6 @@
+<p><a href="https://www.youtube.com/watch?v={{ movie.youtube_id }}">{{ movie.title }}</a></p>
+<ul>
+	{% for stationinmovie in movie.stationinmovie_set.all %}
+	<li>{{ stationinmovie.station_name }}</li>
+	{% endfor %}
+</ul>

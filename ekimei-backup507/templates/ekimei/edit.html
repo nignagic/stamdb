@@ -1,0 +1,16 @@
+<p><a href="https://www.youtube.com/watch?v={{ movie.youtube_id }}">{{ movie.title }}</a></p>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="" method="post">
+    <div class="row">
+        {% for form in formset %}
+            <div class="col-sm-4">
+                {{ form.as_p }}
+            </div>
+        {% endfor %}
+    </div>
+    {{ formset.management_form }}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">送信</button>
+</form>

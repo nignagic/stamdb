@@ -1,0 +1,26 @@
+{% extends 'ekimei/base.html' %}
+
+{% block title %}駅追加 - {{ line }}{% endblock %}
+
+{% block content %}
+    <p>{{ line }}の駅を追加</p>
+    <form action="" method="POST">
+        {{ form.as_p }}
+        {%  csrf_token %}
+        <button type="submit">送信</button>
+    </form>
+{% endblock %}
+
+{% block extrajs %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script>
+$(function(){
+	$('.station_cd').val({{ station_cd }});
+	$('.station_g_cd').val({{ station_cd }});
+	$('.line_cd').val({{ line.line_cd }});
+	$('.e_sort').val({{ station_cd }});
+})
+</script>
+{% endblock %}

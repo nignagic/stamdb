@@ -1,0 +1,177 @@
+{% extends 'ekimei/base.html' %}
+
+{% block title %}編集 - {{ movie }}{% endblock %}
+
+{% block content %}
+<form action="" method="post" enctype="multipart/form-data">
+    <h2>記事</h2>
+    {{ form.as_p }}
+
+        <div class="youtube-frame">
+            <div class="youtube-container">
+                <div class="youtube">
+                    <iframe src="https://www.youtube.com/embed/{{ movie.main_id }}"  frameborder='0' gesture='media' allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    <div class="station-editing-area">
+        <div class="station_select_wrap">
+            <form name="sta_add" method="post">
+                <select name="pref" size="18" id="pref_select">
+                    <option value="0" selected>-----</option>
+                    <option value="1">北海道</option>
+                    <option value="2">青森県</option>
+                    <option value="3">岩手県</option>
+                    <option value="4">宮城県</option>
+                    <option value="5">秋田県</option>
+                    <option value="6">山形県</option>
+                    <option value="7">福島県</option>
+                    <option value="8">茨城県</option>
+                    <option value="9">栃木県</option>
+                    <option value="10">群馬県</option>
+                    <option value="11">埼玉県</option>
+                    <option value="12">千葉県</option>
+                    <option value="13">東京都</option>
+                    <option value="14">神奈川県</option>
+                    <option value="15">新潟県</option>
+                    <option value="16">富山県</option>
+                    <option value="17">石川県</option>
+                    <option value="18">福井県</option>
+                    <option value="19">山梨県</option>
+                    <option value="20">長野県</option>
+                    <option value="21">岐阜県</option>
+                    <option value="22">静岡県</option>
+                    <option value="23">愛知県</option>
+                    <option value="24">三重県</option>
+                    <option value="25">滋賀県</option>
+                    <option value="26">京都府</option>
+                    <option value="27">大阪府</option>
+                    <option value="28">兵庫県</option>
+                    <option value="29">奈良県</option>
+                    <option value="30">和歌山県</option>
+                    <option value="31">鳥取県</option>
+                    <option value="32">島根県</option>
+                    <option value="33">岡山県</option>
+                    <option value="34">広島県</option>
+                    <option value="35">山口県</option>
+                    <option value="36">徳島県</option>
+                    <option value="37">香川県</option>
+                    <option value="38">愛媛県</option>
+                    <option value="39">高知県</option>
+                    <option value="40">福岡県</option>
+                    <option value="41">佐賀県</option>
+                    <option value="42">長崎県</option>
+                    <option value="43">熊本県</option>
+                    <option value="44">大分県</option>
+                    <option value="45">宮崎県</option>
+                    <option value="46">鹿児島県</option>
+                    <option value="47">沖縄県</option>
+                    <option value="48">その他</option>
+                </select>
+
+                {% for pref_list in linebypref %}
+                <select name='s0' size='18' id='pref_{{ forloop.counter }}' class='line_select' style='display: none;'>
+                    {% for line in pref_list %}
+                    <option value='{{ line.line_cd }}' class='line_option'>{{ line.line_name }}</option>
+                    {% endfor %}
+                </select>
+                {% endfor %}
+
+                {% regroup stations by line_cd as station_list %}
+                    {% for line_cd in station_list %}
+                    <select name='s1' size='18' class='line_{{ line_cd.grouper.line_cd }} station_select' style='display: none;'>
+                        {% for station in line_cd.list %}
+                        <option value='{{ station.station_cd }}' data-line='{{ line_cd.grouper.line_cd }}' class='station_option'>{{ station.station_name }}{% if station.e_status == 2 %}【廃】{% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    {% endfor %}
+
+    <h2>添付ファイル</h2>
+    {{ formset.management_form }}
+    <div id="file-area">
+        {% for file_form in formset %}
+        <div class="station_form">
+            {{ file_form.as_p }}
+            <hr>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">送信</button>
+    <button id="add" type="button" class="btn btn-primary">ファイルの追加</button>
+</form>
+
+{% endblock %}
+
+{% block extrajs %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script>
+$(function(){
+    var totalManageElement = $('input#id_stationinmovie_set-TOTAL_FORMS');
+    var currentFileCount = parseInt(totalManageElement.val());
+    $(document).on('click', '.station_option', function() {
+        val = $(this).val();
+        name = $(this).text();
+        var element = "<input type='name' name='stationinmovie_set-" + currentFileCount + "-id_in_movie'id='id_stationinmovie_set-" + currentFileCount + "-id_in_movie' class='id_in_movie'  value='" + currentFileCount + "'><input type='name' name='stationinmovie_set-" + currentFileCount + "-station_cd' id='id_stationinmovie_set-" + currentFileCount + "-station_cd' class='station_cd'  value='" + val + " '><input type='name' name='stationinmovie_set-" + currentFileCount + "-station_name' id='id_stationinmovie_set-" + currentFileCount + "-station_name' class='staion_name'  value='" + name + "'><input type='name' name='stationinmovie_set-" + currentFileCount + "-back_rel' id='id_stationinmovie_set-" + currentFileCount + "-back_rel' class='back_rel'  value='1'><input type='name' name='stationinmovie_set-" + currentFileCount + "-station_nonlist_cd' id='id_stationinmovie_set-" + currentFileCount + "-station_nonlist_cd' class='station_nonlist_cd'  value='1'>"
+        $('div#file-area').append("<div class='station_form'>" + element + "</div>");
+        currentFileCount += 1;
+        totalManageElement.attr('value', currentFileCount);
+    })
+    $('div#file-area').sortable({
+        update: function() {
+            $('.station_form').each(function(i, form) {
+                fields = ['id_in_movie', 'station_cd', 'station_name', 'movie', 'non_line', 'back_rel', 'creator_m', 'creator_a', 'reg_date']
+                $(form).find('.id_in_movie').val(i);
+                $.each(fields,
+                    function(index, elem) {
+                        $(form).find('.' + elem).attr('name', 'stationinmovie_set-' + i + '-' + elem);
+                        $(form).find('.' + elem).attr('id', 'id_stationinmovie_set-' + i + '-' + elem);
+                    }
+                );
+                // $(this).find('.class_id_in_movie').val(i);
+                // $(this).find('.class_id_in_movie').attr('id', 'id_stationinmovie_set-' + i + '-id_in_movie');
+                // $(this).find('.class_id_in_movie').attr('name', 'stationinmovie_set-' + i + '-id_in_movie');
+                // $(this).find('.class_station_cd').attr('id', 'id_stationinmovie_set-' + i + '-station_cd');
+                // $(this).find('.class_station_cd').attr('name', 'stationinmovie_set-' + i + '-station_cd');
+                // $(this).find('.class_staion_name').attr('id', 'id_stationinmovie_set-' + i + '-station_name');
+                // $(this).find('.class_staion_name').attr('name', 'stationinmovie_set-' + i + '-station_name');
+                // $(this).find('.class_back_rel').attr('id', 'id_stationinmovie_set-' + i + '-back_rel');
+                // $(this).find('.class_back_rel').attr('name', 'stationinmovie_set-' + i + '-back_rel');
+            })
+        }
+    });
+});
+
+$(function() {
+    var now = new Date();
+    var y = now.getFullYear();
+    var m = now.getMonth() + 1;
+    var d = now.getDate();
+    var h = now.getHours();
+    var mi = now.getMinutes();
+    var s = now.getSeconds();
+    nowtext = y + "-" + m + "-" + d + " " + h + ":" + mi + ":" + s;
+
+    $('input.reg_date').val(nowtext);
+    $('input.on_movie').val();
+    //$('input.station_cd').val("1110101")
+})
+
+
+$('#pref_select').change(function() {
+    $('.line_select').css('display', 'none');
+    pref = $(this).val();
+    $('#pref_' + pref).show();
+})
+
+$('.line_select').change(function() {
+    $('.station_select').css('display', 'none');
+    line = $(this).val();
+    $('.line_' + line).show();
+})
+</script>
+{% endblock %}
