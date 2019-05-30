@@ -3,8 +3,13 @@
 {% block title %}詳細 - {{ movie }}{% endblock %}
 
 {% block content %}
+<p><a href="{% url 'ekimei:list' %}">リストへ戻る</a></p>
 <p><a href="https://www.youtube.com/watch?v={{ movie.youtube_id }}">{{ movie.title }}</a></p>
-<p><a href="{% url 'ekimei:edit' movie.main_id %}">編集</a> <p><a href="{% url 'ekimei:register' %}">新規追加</a></p>
+<!-- 	{% for song in movie.song.all %}
+		<p><a href="{% url 'ekimei:song' song.id }}">{{ song }}</a></p>
+	{% endfor %} -->
+<p><a href="{% url 'ekimei:edit' movie.main_id %}">編集</a></p>
+<p><a href="{% url 'ekimei:register' %}">新規追加</a></p>
 <div class="youtube-frame">
             <div class="youtube-container">
                 <div class="youtube">
@@ -14,11 +19,7 @@
         </div>
 <ul>
 	{% for stationinmovie in movie.stationinmovie_set.all %}
-		{% if stationinmovie.station_cd == "免田" %}
-			<li>その他</li>
-		{% else %}
 			<li><a href="{% url 'ekimei:station_list' stationinmovie.station_cd.station_cd %}">{{ stationinmovie.station_name }} - {{ stationinmovie.station_cd.line_cd }}</a></li>
-		{% endif %}
 	{% endfor %}
 </ul>
 {% endblock %}

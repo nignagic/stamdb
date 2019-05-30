@@ -4,10 +4,11 @@ from . import views
 app_name = 'ekimei'
 
 urlpatterns = [
-	path('list', views.MovieListView.as_view(), name="list"),
+	path('list/', views.MovieListView.as_view(), name="list"),
 	path('movie/<slug:main_id>/', views.MovieDetailView.as_view(), name='detail'),
 	path('line/<int:line_cd>/', views.MovieListbyLineView.as_view(), name='line_list'),
 	path('station/<int:station_cd>/', views.MovieListbyStationView.as_view(), name='station_list'),
+	# path('song/<int:id>/', views.MovieListbySongView.as_view(), name='song_list'),
 	path('register/', views.MovieRegisterView.as_view(), name='register'),
 	path('registerprototype/', views.MovieRegisterPrototypeView.as_view(), name='registerprototype'),
 	path('station_create/', views.StationCreate.as_view(), name='station_create'),
