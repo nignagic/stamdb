@@ -1,4 +1,5 @@
 {% extends 'ekimei/base.html' %}
+{% load widget_tweaks %}
 {% load tags %}
 
 {% block title %}編集 - {{ movie }}{% endblock %}
@@ -103,31 +104,31 @@
                 </div>
                 <div class='stations-content'>
                     <div class='stations-relation'>
-                        {{ file_form.id }} 
+                        {{ file_form.id}} 
                                 {{ file_form.id.help_text }} 
                                 {{ file_form.id.errors }}
-                        {{ file_form.id_in_movie }} 
+                        {{ file_form.id_in_movie | add_class:"id_in_movie" }} 
                                 {{ file_form.id_in_movie.help_text }} 
                                 {{ file_form.id_in_movie.errors }}
                         <div class='stations-relation-line'></div>
-                        {{ file_form.back_rel }}
+                        {{ file_form.back_rel | add_class:"back_rel" }}
                                 {{ file_form.back_rel.help_text }} 
                                 {{ file_form.back_rel.errors }}
                     </div>
                     <div class='stations-box'>
                         <div class='stations-info'>
-                            {{ file_form.station_cd }}
+                            {{ file_form.station_cd | add_class:"station_cd" }}
                                 {{ file_form.station_cd.help_text }} 
                                 {{ file_form.station_cd.errors }}
                             <div class='station-name-wrapper'>
                                 <div class='station-name-fixed'>{{ file_form.station_cd.value|get_station_cd }} </div>
                                 歌唱名：
-                                {{ file_form.station_name }}
+                                {{ file_form.station_name | add_class:"station_name" }}
                                 {{ file_form.station.help_text }} 
                                 {{ file_form.station_name.errors }}
                             </div>
                         </div>
-                                {{ file_form.station_nonlist_cd }}
+                                {{ file_form.station_nonlist_cd | add_class:"station_nonlist_cd" }}
                                 {{ file_form.station_nonlist_cd.help_text }} 
                                 {{ file_form.station_nonlist_cd.errors }} 
                         <div class='stations-remarks'>備考<input type='textbox' name='remarks[]' class='stations-remarks-text'></div>
