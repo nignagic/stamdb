@@ -15,6 +15,7 @@ urlpatterns = [
 	path('station_create/<int:line_cd>/', views.StationCreatebyLine.as_view(), name='station_create_line'),
 	path('line_create/', views.LineCreate.as_view(), name='line_create'),
 	path('popup/song_create/', views.PopupSongCreate.as_view(), name='popup_song_create'),
+	path('popup/artist_create/', views.PopupArtistCreate.as_view(), name='popup_artist_create'),
 	path('popup/vocal_create/', views.PopupVocalCreate.as_view(), name='popup_vocal_create'),
 	path('edit/<slug:main_id>/', views.update_movie, name='edit'),
 	path('upload/', views.upload, name='upload'),

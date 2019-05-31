@@ -95,8 +95,14 @@ class Artist(models.Model):
 		return self.name
 
 class Song(models.Model):
-	name = models.CharField(max_length=200)
+	name = models.CharField('曲名', max_length=200)
+	namerb = models.CharField('曲名カナ', max_length=200, blank=True)
 	artist = models.ManyToManyField(Artist)
+	album = models.CharField('アルバム名', max_length=200, blank=True)
+	lyrist = models.CharField('作詞者', max_length=200, blank=True)
+	composer = models.CharField('作曲者', max_length=200, blank=True)
+	tieup = models.CharField('タイアップ等', max_length=200, blank=True)
+	description = models.TextField('備考', max_length=500, blank=True)
 	def __str__(self):
 		return self.name
 

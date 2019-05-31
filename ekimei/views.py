@@ -6,7 +6,7 @@ from django.forms import ModelForm, inlineformset_factory
 
 from . import forms
 
-from .models import Prefecture, Line, Station, Movie, StationInMovie, Post, Song, Vocal
+from .models import Prefecture, Line, Station, Movie, StationInMovie, Post, Song, Artist, Vocal
 import csv
 from io import TextIOWrapper
 
@@ -114,7 +114,7 @@ class LineCreate(generic.CreateView):
 
 class SongCreate(generic.CreateView):
 	model = Song
-	fields = ('name',)
+	fields = '__all__';
 	success_url = reverse_lazy('ekimei:list')
 
 class PopupSongCreate(SongCreate):
@@ -124,6 +124,22 @@ class PopupSongCreate(SongCreate):
 			'object_name': str(song),
 			'object_pk': song.pk,
 			'function_name': 'add_song'
+		}
+
+		return render(self.request, 'ekimei/close.html', context)
+
+class ArtistCreate(generic.CreateView):
+	model = Artist
+	fields = '__all__';
+	success_url = reverse_lazy('ekimei:list')
+
+class PopupArtistCreate(ArtistCreate):
+	def form_valid(self, form):
+		artist = form.save()
+		context = {
+			'object_name': str(artist),
+			'object_pk': artist.pk,
+			'function_name': 'add_artist'
 		}
 
 		return render(self.request, 'ekimei/close.html', context)

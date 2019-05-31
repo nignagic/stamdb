@@ -1,8 +1,23 @@
 {% extends 'ekimei/base.html' %}
 {% block content %}
     <form action="" method="POST">
+	<a href="javascript:void(0);" onclick="window.open('{% url 'ekimei:popup_artist_create' %}','sub2win','width=600,height=500');">Artist+</a>
         {{ form.as_p }}
         {%  csrf_token %}
         <button type="submit">送信</button>
     </form>
 {% endblock %}
+
+{% block extrajs %}
+	<script type="text/javascript">
+		function add_artist(name, pk) {
+			var select = document.getElementById('id_artist');
+			var option = document.createElement('option');
+			option.setAttribute('value', pk);
+			option.innerHTML = name;
+
+			select.add(option, 0);
+			select.options[0].selected = true;
+		}
+	</script>
+	{% endblock %}
