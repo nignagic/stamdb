@@ -10,14 +10,14 @@ from .models import Prefecture, Line, Station, Movie, StationInMovie, Post, Song
 import csv
 from io import TextIOWrapper
 
+# class MovieListView(generic.ListView):
+# 	template_name = 'ekimei/list.html'
+# 	context_object_name = 'latest_movie_list'
+
+# 	def get_queryset(self):
+		# return Movie.objects.order_by('-reg_date')
+
 class MovieListView(generic.ListView):
-	template_name = 'ekimei/list.html'
-	context_object_name = 'latest_movie_list'
-
-	def get_queryset(self):
-		return Movie.objects.order_by('-reg_date')
-
-class MovieListbyCreatorView(generic.ListView):
 	template_name = 'ekimei/listbycreator.html'
 	context_object_name = 'latest_movie_list'
 
