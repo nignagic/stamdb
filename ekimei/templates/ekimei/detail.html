@@ -18,8 +18,14 @@
             </div>
         </div>
 <ul>
-	{% for stationinmovie in movie.stationinmovie_set.all %}
+	{% regroup movie.stationinmovie_set.all by station_cd.line_cd as line_list %}
+		{% for line in line_list %}
+		<li>{{ line.grouper }}</li>
+		<ul>
+			{% for stationinmovie in line.list %}
 			<li><a href="{% url 'ekimei:station_list' stationinmovie.station_cd.station_cd %}">{{ stationinmovie.station_name }} - {{ stationinmovie.station_cd.line_cd }}</a></li>
-	{% endfor %}
+			{% endfor %}
+		</ul>
+		{% endfor %}
 </ul>
 {% endblock %}
