@@ -17,6 +17,13 @@ class MovieListView(generic.ListView):
 	def get_queryset(self):
 		return Movie.objects.order_by('-reg_date')
 
+class MovieListbyCreatorView(generic.ListView):
+	template_name = 'ekimei/listbycreator.html'
+	context_object_name = 'latest_movie_list'
+
+	def get_queryset(self):
+		return Movie.objects.order_by('-published_at').order_by('-channel')
+
 class MovieListbyStationView(generic.ListView):
 	template_name = 'ekimei/moviebystationlist.html'
 	context_object_name = "station_matches"
