@@ -97,7 +97,7 @@ class Artist(models.Model):
 class Song(models.Model):
 	name = models.CharField('曲名', max_length=200)
 	namerb = models.CharField('曲名カナ', max_length=200, blank=True)
-	artist = models.ManyToManyField(Artist)
+	artist = models.ManyToManyField(Artist, blank=True)
 	album = models.CharField('アルバム名', max_length=200, blank=True)
 	lyrist = models.CharField('作詞者', max_length=200, blank=True)
 	composer = models.CharField('作曲者', max_length=200, blank=True)
@@ -107,7 +107,7 @@ class Song(models.Model):
 		return self.name
 
 class Vocal(models.Model):
-	name = models.CharField(max_length=200)
+	name = models.CharField('歌手名', max_length=200)
 	def __str__(self):
 		return self.name
 
