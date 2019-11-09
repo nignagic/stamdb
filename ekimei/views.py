@@ -1,4 +1,7 @@
-from django.http import HttpResponseRedirect, JsonResponse
+import django_filters
+from rest_framework import viewsets, filters, generics
+from . import serializer
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
@@ -171,12 +174,12 @@ def update_movie(request, main_id):
 	movie = get_object_or_404(Movie, main_id=main_id)
 	form = forms.MovieUpdateForm(request.POST or None, instance=movie)
 	formset = forms.StationInMovieFormset(request.POST or None, instance=movie)
-	prefs = Prefecture.objects.all()
-	linebypref = []
-	for pref in prefs:
-		linebypref.append(Line.objects.filter(pref_cds=pref.pref_cd))
-	lines = Line.objects.all()
-	stations = Station.objects.all().order_by('-e_sort').order_by('line_cd')
+	# prefs = Prefecture.objects.all()
+	# linebypref = []
+	# for pref in prefs:
+	# 	linebypref.append(Line.objects.filter(pref_cds=pref.pref_cd))
+	# lines = Line.objects.all()
+	# stations = Station.objects.all().order_by('-e_sort').order_by('line_cd')
 	if request.method == 'POST' and form.is_valid() and formset.is_valid():
 		allstation = StationInMovie.objects.filter(movie=movie)
 		allstation.delete()
@@ -188,13 +191,14 @@ def update_movie(request, main_id):
 		'movie': movie,
 		'form': form,
 		'formset': formset,
-		'prefs': prefs,
-		'linebypref': linebypref,
-		'lines': lines,
-		'stations': stations
+		# 'prefs': prefs,
+		# 'linebypref': linebypref,
+		# 'lines': lines,
+		# 'stations': stations
 	}
 
-	return render(request, 'ekimei/edit.html', context)
+	# return render(request, 'ekimei/edit.html', context)
+	return render(request, 'ekimei/editbyjson.html', context)
 
 class MovieRegisterPrototypeView(generic.CreateView):
 	template_name = 'ekimei/register-prototype.html'
@@ -279,3 +283,15 @@ def lineprefset(request):
 		line.pref_cds.add(pref)
 
 	return render(request, 'ekimei/lineprefset.html')
+
+class StationViewSet(generics.ListAPIView):
+	serializer_class = serializer.StationSerializer
+	def get_queryset(self):
+		query_my_name = self.kwargs['line_cd']
+		return Station.objects.filter(line_cd=query_my_name)
+
+class LineViewSet(generics.ListAPIView):
+	serializer_class = serializer.LineSerializer
+	def get_queryset(self):
+		query_my_name = self.kwargs['pref_cd']
+		return Line.objects.filter(pref_cds=query_my_name)

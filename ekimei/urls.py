@@ -1,5 +1,12 @@
 from django.urls import path
+from django.conf.urls import url, include
 from . import views
+
+from rest_framework import routers
+router = routers.DefaultRouter()
+# router.register('station', views.StationViewSet)
+# router.register('line/<int:pref_cd>', views.LineViewSet.as_view(), base_name='lines')
+urlpatterns = router.urls
 
 app_name = 'ekimei'
 
@@ -23,4 +30,6 @@ urlpatterns = [
 	path('uploadline/', views.uploadline, name='uploadline'),
 	path('uploadpref/', views.uploadpref, name='uploadpref'),
 	path('lineprefset/', views.lineprefset, name='lineprefset'),
+	url('^api/line/(?P<pref_cd>.+)/$', views.LineViewSet.as_view()),
+	url('^api/station/(?P<line_cd>.+)/$', views.StationViewSet.as_view()),
 ]

@@ -17,9 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 
+from django.conf.urls import url, include
+from ekimei.urls import router as ekimei_router
+
 urlpatterns = [
 	path('ekimei/', include('ekimei.urls')),
     path('admin/', admin.site.urls),
+    url('api/', include(ekimei_router.urls)),
 ]
 
 if settings.DEBUG:
