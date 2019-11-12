@@ -58,18 +58,36 @@ class MovieListbyLineView(generic.ListView):
 		return context
 
 class MovieListbySongView(generic.ListView):
-	template_name = 'ekimei/listbycreator.html'
-	context_object_name = 'latest_movie_list'
+	model = Song
+	template_name = 'ekimei/moviebysonglist.html'
 
-	def get_queryset(self):
-		return Movie.objects.order_by('-published_at').order_by('-channel')
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+
+		movies = Movie.objects.filter(song=self.kwargs['id']).order_by('-published_at')
+
+		song = Song.objects.get(pk=self.kwargs['id'])
+		context = {
+			'song': song,
+			'movies': movies
+		}
+		return context
 
 class MovieListbyVocalView(generic.ListView):
-	template_name = 'ekimei/listbycreator.html'
-	context_object_name = 'latest_movie_list'
+	model = Vocal
+	template_name = 'ekimei/moviebyvocallist.html'
 
-	def get_queryset(self):
-		return Movie.objects.order_by('-published_at').order_by('-channel')
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+
+		movies = Movie.objects.filter(vocal=self.kwargs['id']).order_by('-published_at')
+
+		vocal = Vocal.objects.get(pk=self.kwargs['id'])
+		context = {
+			'vocal': vocal,
+			'movies': movies
+		}
+		return context
 
 class MovieDetailView(generic.DetailView):
 	model = Movie

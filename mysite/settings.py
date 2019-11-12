@@ -23,9 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '+ra8kx6*8w70cohb5+bu9$5f$+zaqnr3*maky_!g2!p=kxsj)e'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+# Pythonanywhere用の設定を追加
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+ALLOWED_HOSTS = ['localhost', '.pythonanywhere.com']
 
 
 # Application definition
