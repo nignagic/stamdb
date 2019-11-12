@@ -1,22 +1,125 @@
 {% extends 'ekimei/base.html' %}
 
 {% block title %}詳細 - {{ movie }}{% endblock %}
-
+{% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'ekimei/register.css' %}">
+
 <p><a href="{% url 'ekimei:list' %}">リストへ戻る</a></p>
-<p><a href="https://www.youtube.com/watch?v={{ movie.youtube_id }}">{{ movie.title }}</a></p>
-<!-- 	{% for song in movie.song.all %}
-		<p><a href="{% url 'ekimei:song' song.id }}">{{ song }}</a></p>
-	{% endfor %} -->
-<p><a href="{% url 'ekimei:edit' movie.main_id %}">編集</a></p>
-<p><a href="{% url 'ekimei:register' %}">新規追加</a></p>
+	{% if movie.song.all %}
+		使用楽曲
+		{% for song in movie.song.all %}
+			<p>‐<a href="{% url 'ekimei:song_list' song.id %}">{{ song }}</a></p>
+		{% endfor %}
+	{% endif %}
+	{% if movie.vocal.all %}
+		使用ボーカル
+		{% for vocal in movie.vocal.all %}
+			<p>‐<a href="{% url 'ekimei:vocal_list' vocal.id %}">{{ vocal }}</a></p>
+		{% endfor %}
+	{% endif %}
+<!-- <p><a href="{% url 'ekimei:edit' movie.main_id %}">編集</a></p>
+<p><a href="{% url 'ekimei:register' %}">新規追加</a></p> -->
+        <div id="list-area">
+        	<section class="video-item-section">
+        		<div class="video-item">
+        			<article class="videoTile">
+        				<div class="video-number"></div>
+        				<div class="videoTile-inner">
+        					<div class="videoTile-head">
+        						<a href="https://www.youtube.com/watch?v={{ movie.youtube_id }}" target="_blank" class="video-link">
+        							<div class="videoTile-img-box">
+        								<div class="videoTile-img" style="background-image:url(https://i.ytimg.com/vi/{{ movie.youtube_id }}/hqdefault.jpg)"></div>
+        							</div>
+        							<div class="videoTile-content">
+        								<h2 class="video-title">{{ movie.title }}</h2>
+        								<div class="video-channel"><span>{{ movie.channel }}</span></div>
+        							</div>
+        						</a>
+        					</div>
+        					<div class="video-middle">
+        						<div class="video-middle-1">
+        							<div class="video-statistics">
+        								<div class="video-statistics-item">
+        									<div class="video-statistics-num">
+        									{% if n_view == 0 %}
+        										0
+        									{% else %}
+        										{{ movie.n_view }}
+        									{% endif %}</div>
+        									<div class="video-statistics-name">再生回数</div>
+        								</div>
+        								<div class="video-statistics-item">
+        									<div class="video-statistics-num">
+        									{% if n_like == 0 %}
+        										0
+        									{% else %}
+        										{{ movie.n_like }}
+        									{% endif %}</div>
+        									<div class="video-statistics-name">高評価数</div>
+        								</div>
+        								<div class="video-statistics-item">
+        									<div class="video-statistics-num">
+        									{% if n_dislike == 0 %}
+        										0
+        									{% else %}
+        										{{ movie.n_dislike }}
+        									{% endif %}
+        									</div>
+        									<div class="video-statistics-name">低評価数</div>
+        								</div>
+        								<div class="video-statistics-item">
+        									<div class="video-statistics-num">
+        									{% if n_comment == 0 %}
+        										0
+        									{% else %}
+        										{{ movie.n_comment }}
+        									{% endif %}</div>
+        									<div class="video-statistics-name">コメント数</div>
+        								</div>
+        							</div>
+        							<div class="video-time">
+        								<h3 class="video-time-head">投稿日時</h3>
+        								<table class="video-time-content">
+        									<tbody>
+        										<tr>
+        											<td>世界標準時</td>
+        											<td class="video-time-iso">{{ movie.published_at }}</td>
+        										</tr>
+        										<tr>
+        											<td>日本時間</td>
+        											<td class="video-time-jpn">2019-10-28 18:00:00</td>
+        										</tr>
+        									</tbody>
+        								</table>
+        							</div>
+        						</div>
+        						<div class="video-description">
+        							<p id="video-description-inner"></p>
+        						</div>
+        					</div>
+        				</div>
+					</article>
+				</div>
+			</section>
+		</div>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+		<script>
+			$(function() {
+				description = "{{ movie.description }}";
+				$('#video-description-inner').html(description.replace(/&lt;br&gt;/g, '<br>'));
+			})
+		</script>
+
 <div class="youtube-frame">
-            <div class="youtube-container">
-                <div class="youtube">
-                    <iframe src="https://www.youtube.com/embed/{{ movie.main_id }}"  frameborder='0' gesture='media' allowfullscreen></iframe>
-                </div>
-            </div>
+    <div class="youtube-container">
+        <div class="youtube">
+            <iframe src="https://www.youtube.com/embed/{{ movie.main_id }}"  frameborder='0' gesture='media' allowfullscreen></iframe>
         </div>
+    </div>
+</div>
 <ul>
 	{% regroup movie.stationinmovie_set.all by station_cd.line_cd as line_list %}
 		{% for line in line_list %}

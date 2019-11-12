@@ -57,6 +57,20 @@ class MovieListbyLineView(generic.ListView):
 		}
 		return context
 
+class MovieListbySongView(generic.ListView):
+	template_name = 'ekimei/listbycreator.html'
+	context_object_name = 'latest_movie_list'
+
+	def get_queryset(self):
+		return Movie.objects.order_by('-published_at').order_by('-channel')
+
+class MovieListbyVocalView(generic.ListView):
+	template_name = 'ekimei/listbycreator.html'
+	context_object_name = 'latest_movie_list'
+
+	def get_queryset(self):
+		return Movie.objects.order_by('-published_at').order_by('-channel')
+
 class MovieDetailView(generic.DetailView):
 	model = Movie
 	slug_field = "main_id"
@@ -217,14 +231,16 @@ def upload(request):
 			station.station_name = line[2]
 			station.station_name_k = line[3]
 			station.station_name_r = line[4]
-			station.line_cd = line[5]
-			station.pref_cd = line[6]
+			station.line_cd = Line.objects.get(line_cd=line[5])
+			station.pref_cd = Prefecture.objects.get(pref_cd=line[6])
 			station.post = line[7]
 			station.add = line[8]
 			station.lon = line[9]
 			station.lat = line[10]
-			station.open_ymd = line[11]
-			station.close_ymd = line[12]
+			if line[11] != '':
+				station.open_ymd = line[11]
+			if line[12] != '':
+				station.close_ymd = line[12]
 			station.e_status = line[13]
 			station.e_sort = line[14]
 			station.save()
@@ -278,8 +294,8 @@ def uploadpref(request):
 def lineprefset(request):
 	stations = Station.objects.all()
 	for station in stations:
-		line = Line.objects.get(line_cd = station.line_cd)
-		pref = Prefecture.objects.get(pref_cd = station.pref_cd)
+		line = station.line_cd
+		pref = station.pref_cd
 		line.pref_cds.add(pref)
 
 	return render(request, 'ekimei/lineprefset.html')

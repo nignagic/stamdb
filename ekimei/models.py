@@ -30,7 +30,7 @@ class Station(models.Model):
 	station_name = models.CharField('駅名', max_length=200)
 	station_name_k = models.CharField('駅名(カナ)', max_length=200, null=True, blank=True)
 	station_name_r = models.CharField('駅名(ローマ字)', max_length=200, null=True, blank=True)
-	line_cd = models.ForeignKey(Line, to_field='line_cd', on_delete=models.CASCADE, verbose_name='路線')
+	line_cd = models.ForeignKey(Line, to_field='line_cd', null=True, blank=True, on_delete=models.CASCADE, verbose_name='路線')
 	pref_cd = models.ForeignKey(Prefecture, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='都道府県')
 	post = models.CharField('駅郵便番号', max_length=200, null=True, blank=True)
 	add = models.CharField('住所', max_length=200, null=True, blank=True)
@@ -91,6 +91,7 @@ class Post(models.Model):
 
 class Artist(models.Model):
 	name = models.CharField(max_length=200)
+	parent = models.ManyToManyField('self', verbose_name='所属グループ等', blank=True)
 	def __str__(self):
 		return self.name
 
@@ -103,6 +104,7 @@ class Song(models.Model):
 	composer = models.CharField('作曲者', max_length=200, blank=True)
 	tieup = models.CharField('タイアップ等', max_length=200, blank=True)
 	description = models.TextField('備考', max_length=500, blank=True)
+	parent = models.ManyToManyField('self', verbose_name='原作等', blank=True)
 	def __str__(self):
 		return self.name
 
@@ -114,7 +116,10 @@ class Vocal(models.Model):
 class Movie(models.Model):
 	title = models.CharField('動画タイトル', max_length=200)
 	channel = models.ForeignKey(
-		Creator, on_delete=models.SET_NULL, null=True, verbose_name='投稿チャンネル'
+		Creator, on_delete=models.SET_NULL, null=True, related_name='channel', verbose_name='投稿チャンネル'
+	)
+	creator = models.ManyToManyField(
+		Creator, blank=True, verbose_name='参加者', related_name='participant'
 	)
 	main_id = models.CharField('動画ID', max_length=200, unique=True)
 	youtube_id = models.CharField('YouTubeのID', max_length=200, blank=True)
@@ -131,14 +136,13 @@ class Movie(models.Model):
 
 	category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, verbose_name='カテゴリー', default=1)
 	song = models.ManyToManyField(Song, blank=True, verbose_name='使用楽曲')
-	artist = models.ManyToManyField(Artist, blank=True, verbose_name='アーティスト')
 	vocal = models.ManyToManyField(Vocal, blank=True, verbose_name='使用ボーカル')
-
 	COLLAB = (
 		('S', '単作'),
 		('C', '合作')
 	)
 	is_collab = models.CharField('合作か', max_length=1, choices=COLLAB, default='S')
+	parent = models.ManyToManyField('self', verbose_name='親作品', blank=True)
 	def __str__(self):
 		return self.title
 
@@ -152,6 +156,8 @@ class StationInMovie(models.Model):
 	back_rel = models.IntegerField('back station relationship', default=0)
 	creator_m = models.ManyToManyField(Creator, related_name="movie_creator", blank=True)
 	creator_a = models.ManyToManyField(Creator, related_name="audio_creator", blank=True)
+	song = models.ManyToManyField(Song, blank=True, verbose_name='使用楽曲')
+	vocal = models.ManyToManyField(Vocal, blank=True, verbose_name='使用ボーカル')
 	reg_date = models.DateTimeField('更新日時', blank=True, null=True)
 	def __str__(self):
 		return self.station_name
