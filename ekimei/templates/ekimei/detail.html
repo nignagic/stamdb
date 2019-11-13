@@ -84,11 +84,12 @@
         									<tbody>
         										<tr>
         											<td>世界標準時</td>
-        											<td class="video-time-iso">{{ movie.published_at }}</td>
+        											{% load tz %}
+        											<td class="video-time-iso">{{ movie.published_at|utc|date:"Y年Nd日 H:i:s" }}</td>
         										</tr>
         										<tr>
         											<td>日本時間</td>
-        											<td class="video-time-jpn">2019-10-28 18:00:00</td>
+        											<td class="video-time-jpn">{{ movie.published_at|date:"Y年Nd日 H:i:s" }}</td>
         										</tr>
         									</tbody>
         								</table>

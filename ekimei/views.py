@@ -45,8 +45,8 @@ class MovieListbyLineView(generic.ListView):
 		stations = Station.objects.filter(line_cd=self.kwargs['line_cd'])
 		movies = []
 		for station in stations:
-			stationinmovieall = StationInMovie.objects.filter(station_cd=station)
-			for stationinmovie in stationinmovieall:
+			stationinmoviefilter = StationInMovie.objects.filter(station_cd=station)
+			for stationinmovie in stationinmoviefilter:
 				movies.append(stationinmovie.movie)
 		movies_unique_order = sorted(set(movies), key=movies.index)
 
