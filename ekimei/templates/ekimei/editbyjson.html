@@ -29,20 +29,25 @@
     <p></p>
 </div>
 <script>
+    $('.namesearch').keypress(function(e) {
+        if (e.which == 13) {
+            namesearch();
+        }
+    })
     $('.namesearchbutton').on('click', function() {
+        namesearch();
+    })
+    function namesearch() {
         text = $('.namesearch').val();
         var s = "http://localhost:8000/ekimei/api/stationsearch/" + text + "/?format=json";
         $(".station_select").empty();
         $.getJSON(s, function(data) {
             for(var i in data) {
-                var s2 = "http://localhost:8000/ekimei/api/linename/" + data[i].line_cd + "/?format=json";
-                $.getJSON(s2, function(linedata) {
-                    var op_station = "<div value='" + data[i].station_cd + "' data-line='" + data[i].line_cd + "' class='station_option'>" + data[i].station_name + "‐" + linedata[0].line_name + "</div>"
-                    $(".station_select").append(op_station);
-                })
+                var op_station = "<div value='" + data[i].station_cd + "' data-line='" + data[i].line_cd + "' class='station_option'>" + data[i].station_name + "‐" + data[i].line_name + "</div>"
+                $(".station_select").append(op_station);
             }
         })
-    })
+    }
 </script>
 <div>
     <div value='1' data-line='0' class='station_option'>廃駅</div>
@@ -204,7 +209,7 @@
     {% csrf_token %}
     </div>
 </div>
-    <button type="submit" class="btn btn-primary">送信</button>
+    <button type="button" onclick="submit();" class="btn btn-primary">送信</button>
     <button id="add" type="button" class="btn btn-primary">ファイルの追加</button>
 </form>
 

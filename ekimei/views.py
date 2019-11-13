@@ -340,4 +340,4 @@ class LineNameViewSet(generics.ListAPIView):
 	serializer_class = serializer.LineNameSerializer
 	def get_queryset(self):
 		query_my_name = self.kwargs['line_cd']
-		return Line.objects.get(line_cd=query_my_name)
+		return Line.objects.filter(line_cd=query_my_name)
