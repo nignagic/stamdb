@@ -24,6 +24,27 @@
         </div>
             <form name="sta_add" method="post">
 <div>
+    <div>駅名検索（仮）</div>
+    <input type=textbox class="namesearch"><input type=button name="namesearch" class="namesearchbutton" value="検索">
+    <p></p>
+</div>
+<script>
+    $('.namesearchbutton').on('click', function() {
+        text = $('.namesearch').val();
+        var s = "http://localhost:8000/ekimei/api/stationsearch/" + text + "/?format=json";
+        $(".station_select").empty();
+        $.getJSON(s, function(data) {
+            for(var i in data) {
+                var s2 = "http://localhost:8000/ekimei/api/linename/" + data[i].line_cd + "/?format=json";
+                $.getJSON(s2, function(linedata) {
+                    var op_station = "<div value='" + data[i].station_cd + "' data-line='" + data[i].line_cd + "' class='station_option'>" + data[i].station_name + "‐" + linedata[0].line_name + "</div>"
+                    $(".station_select").append(op_station);
+                })
+            }
+        })
+    })
+</script>
+<div>
     <div value='1' data-line='0' class='station_option'>廃駅</div>
     <div value='2' data-line='0' class='station_option'>未成駅</div>
     <div value='0' data-line='0' class='station_option'>その他</div>

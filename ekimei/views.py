@@ -329,3 +329,15 @@ class LineViewSet(generics.ListAPIView):
 	def get_queryset(self):
 		query_my_name = self.kwargs['pref_cd']
 		return Line.objects.filter(pref_cds=query_my_name)
+
+class StationSearchViewSet(generics.ListAPIView):
+	serializer_class = serializer.StationSearchSerializer
+	def get_queryset(self):
+		query_my_name = self.kwargs['words']
+		return Station.objects.filter(station_name__contains=query_my_name)
+
+class LineNameViewSet(generics.ListAPIView):
+	serializer_class = serializer.LineNameSerializer
+	def get_queryset(self):
+		query_my_name = self.kwargs['line_cd']
+		return Line.objects.get(line_cd=query_my_name)

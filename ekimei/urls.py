@@ -33,4 +33,6 @@ urlpatterns = [
 	path('lineprefset/', views.lineprefset, name='lineprefset'),
 	url('^api/line/(?P<pref_cd>.+)/$', views.LineViewSet.as_view()),
 	url('^api/station/(?P<line_cd>.+)/$', views.StationViewSet.as_view()),
+	url('^api/stationsearch/(?P<words>.+)/$', views.StationSearchViewSet.as_view()),
+	url('^api/linename/(?P<line_cd>.+)/$', views.LineNameViewSet.as_view()),
 ]

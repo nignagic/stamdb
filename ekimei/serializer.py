@@ -11,3 +11,13 @@ class LineSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Line
 		fields = ('line_name', 'line_cd')
+
+class StationSearchSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Station
+		fields = ('station_name', 'station_cd', 'line_cd')
+
+class LineNameSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Line
+		fields = ('line_name', 'line_cd')
